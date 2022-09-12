@@ -9,7 +9,7 @@ const Header = (props) => {
 const Part = (props) => {
     return (
         <div>
-            <p>{props.name} {props.count}</p>
+            <p>{props.part.name} {props.part.exercises}</p>
         </div>
     )
 }
@@ -17,43 +17,48 @@ const Part = (props) => {
 const Content = (props) => {
     return (
         <div>
-            <Part name={props.parts[0].name} count={props.parts[0].exercises} />
-            <Part name={props.parts[1].name} count={props.parts[1].exercises} />
-            <Part name={props.parts[2].name} count={props.parts[2].exercises} />
+            <Part part={props.parts[0]} />
+            <Part part={props.parts[1]} />
+            <Part part={props.parts[2]} />
         </div>
     )
 }
 
 const Total = (props) => {
+    let totalCount = 0;
+    props.parts.forEach(item => totalCount += item.exercises);
     return (
         <div>
-            <p>Number of excercises {props.totalCount}</p>
+            <p>Number of excercises {totalCount}</p>
         </div>
         )
 }
 
 const App = () => {
     const course = "Half Stack application development"
-    const part1 = {
-        name: "Fundamentals of React",
-        exercises: 10
-    }
-    const part2 = {
-        name: "Using props to pass data",
-        exercises: 7
-    }
-    const part3 = {
-        name: "State of a component",
-        exercises:14
-    }
+    
+    const parts = [
+        {
+            name: "Fundamentals of React",
+            exercises: 10
+        },
+        {
+            name: "Using props to pass data",
+            exercises: 7
+        },
+        {
+            name: "State of a component",
+            exercises:14
+        },
+    ]
     
     return (
         <div>
             <Header course={course} />
 
-            <Content parts={[part1,part2,part3]} />
+            <Content parts={parts} />
 
-            <Total totalCount={part1.exercises + part2.exercises + part3.exercises} />
+            <Total parts={parts} />
         </div>
     )
 }
