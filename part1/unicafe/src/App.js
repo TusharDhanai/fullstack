@@ -14,12 +14,21 @@ const Feedback = () => {
     )
 }
 
+const StatisticLine = (props) => {
+    return (
+        <tr>
+            <td>{props.text}</td>
+            <td>{props.value}</td>
+        </tr>
+    )
+}
+
 const Statistics = (props) => {
     const good = Number(props.count[0]);
     const neutral = Number(props.count[1]);
     const bad = Number(props.count[2]);
 
-    if (good == 0 && neutral == 0 && bad == 0) {
+    if (good === 0 && neutral === 0 && bad === 0) {
         return <p>No Feedback given.</p>
     }
 
@@ -29,12 +38,14 @@ const Statistics = (props) => {
     return (
         <div>
             <h1>Statistics</h1>
-            <p>{props.name[0]} {good}</p>
-            <p>{props.name[1]} {neutral}</p>
-            <p>{props.name[2]} {bad}</p>
-            <p>All {total}</p>
-            <p>Average {total != 0 ? average:0}</p>
-            <p>Positive {total != 0 ? positive:0}%</p>
+            <table>
+                <StatisticLine text={props.name[0]} value={good} />
+                <StatisticLine text={props.name[1]} value={neutral} />
+                <StatisticLine text={props.name[2]} value={bad} />
+                <StatisticLine text="All" value={total} />
+                <StatisticLine text="Average" value={average} />
+                <StatisticLine text="Positive" value={positive} />
+            </table>
         </div>
     )
 }
