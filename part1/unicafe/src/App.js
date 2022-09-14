@@ -39,12 +39,14 @@ const Statistics = (props) => {
         <div>
             <h1>Statistics</h1>
             <table>
-                <StatisticLine text={props.name[0]} value={good} />
-                <StatisticLine text={props.name[1]} value={neutral} />
-                <StatisticLine text={props.name[2]} value={bad} />
-                <StatisticLine text="All" value={total} />
-                <StatisticLine text="Average" value={average} />
-                <StatisticLine text="Positive" value={positive} />
+                <tbody>
+                    <StatisticLine text={props.name[0]} value={good} />
+                    <StatisticLine text={props.name[1]} value={neutral} />
+                    <StatisticLine text={props.name[2]} value={bad} />
+                    <StatisticLine text="All" value={total} />
+                    <StatisticLine text="Average" value={average} />
+                    <StatisticLine text="Positive" value={positive} />
+                </tbody>
             </table>
         </div>
     )
