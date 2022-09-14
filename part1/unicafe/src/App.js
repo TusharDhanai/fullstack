@@ -15,17 +15,22 @@ const Feedback = () => {
 }
 
 const Statistics = (props) => {
-    const total = 0;
-    props.count.forEach(element => {
-        total += element;    
-    });
+    const good = Number(props.count[0]);
+    const neutral = Number(props.count[1]);
+    const bad = Number(props.count[2]);
+    const total = good + bad + neutral;
+    const average = (good - bad) / total;
+    console.log(average)
+    const positive = good / total * 100
     return (
         <div>
             <h1>Statistics</h1>
-            <p>{props.name[0]} {props.count[0]}</p>
-            <p>{props.name[1]} {props.count[1]}</p>
-            <p>{props.name[2]} {props.count[2]}</p>
+            <p>{props.name[0]} {good}</p>
+            <p>{props.name[1]} {neutral}</p>
+            <p>{props.name[2]} {bad}</p>
             <p>All {total}</p>
+            <p>Average {total != 0 ? average:0}</p>
+            <p>Positive {total != 0 ? positive:0}%</p>
         </div>
     )
 }
