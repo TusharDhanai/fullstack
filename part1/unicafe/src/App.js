@@ -15,12 +15,17 @@ const Feedback = () => {
 }
 
 const Statistics = (props) => {
+    const total = 0;
+    props.count.forEach(element => {
+        total += element;    
+    });
     return (
         <div>
             <h1>Statistics</h1>
             <p>{props.name[0]} {props.count[0]}</p>
             <p>{props.name[1]} {props.count[1]}</p>
             <p>{props.name[2]} {props.count[2]}</p>
+            <p>All {total}</p>
         </div>
     )
 }
