@@ -18,9 +18,13 @@ const Statistics = (props) => {
     const good = Number(props.count[0]);
     const neutral = Number(props.count[1]);
     const bad = Number(props.count[2]);
+
+    if (good == 0 && neutral == 0 && bad == 0) {
+        return <p>No Feedback given.</p>
+    }
+
     const total = good + bad + neutral;
     const average = (good - bad) / total;
-    console.log(average)
     const positive = good / total * 100
     return (
         <div>
