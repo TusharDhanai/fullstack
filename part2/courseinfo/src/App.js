@@ -17,8 +17,7 @@ const Part = ({part}) => {
 const Content = ({parts}) => parts.map(item => <Part key={item.id} part={item} />)
 
 const Total = ({parts}) => {
-    let totalCount = 0;
-    parts.forEach(item => totalCount += item.exercises);
+    let totalCount = parts.reduce((total,current) => total + current.exercises, 0)
     return (
         <div>
             <p>Number of excercises {totalCount}</p>
