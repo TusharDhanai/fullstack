@@ -4,14 +4,20 @@ const App = () => {
     const [persons, setPersons] = useState([
         { 
             name: 'Arto Hellas',
-            id: 1
         }
     ])
     const [newName, setNewName] = useState('')
 
     const addPerson = (event) => {
         event.preventDefault();
-        setPersons(persons.concat({name: newName,id: persons.length + 1}))
+        const duplicate = persons.some(item => item.name === newName);
+
+        if (duplicate) {
+            alert(`${newName} is already added to the phonebook.`)
+            return;
+        }
+
+        setPersons(persons.concat({name: newName}))
     }
 
     return (
@@ -27,7 +33,7 @@ const App = () => {
             </form>
             <h2>Numbers</h2>
             <div>
-                {persons.map(item => <p key={item.id}>{item.name}</p>)}
+                {persons.map(item => <p key={item.name}>{item.name}</p>)}
             </div>
         </div>
     )
