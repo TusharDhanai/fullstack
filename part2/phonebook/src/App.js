@@ -1,5 +1,40 @@
 import { useState } from 'react'
 
+const Person = ({name,number}) => <p>{name} {number}</p>
+
+const People = ({persons,searchText}) => {
+    return (
+        <div>
+            {
+                persons.map(item => {
+                    if (item.name.toLowerCase().includes(searchText.toLowerCase()))
+                        return <Person key={item.id} name={item.name} number={item.number} />
+                })
+            }
+        </div>
+    )
+}
+
+const Input = ({text,onInput,autoComplete}) => {
+    return (
+        <div>
+            {text}: <input onInput={onInput} autoComplete={autoComplete} />
+        </div>
+    )   
+}
+
+const Button = ({onClick,type,text}) => <button onClick={onClick} type={type}>{text}</button>
+
+const PeopleForm = ({onNameInput,onNumberInput,onSubmit}) => {
+    return (
+        <form>
+            <Input text="name:" onInput={onNameInput} autoComplete="off" />
+            <Input text="number:" onInput={onNumberInput} autoComplete="off" />
+            <Button onClick={onSubmit} type="submit" text="add" />
+        </form>
+    )
+}
+
 const App = () => {
     const [persons, setPersons] = useState([
         { name: 'Arto Hellas', number: '040-123456', id: 1 },
@@ -10,6 +45,10 @@ const App = () => {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [searchText, setSearchText] = useState('')
+
+    const nameInput = event => setNewName(event.target.value)
+
+    const numberInput = event => setNewNumber(event.target.value)
 
     const addPerson = (event) => {
         event.preventDefault();
@@ -26,28 +65,11 @@ const App = () => {
     return (
         <div>
             <h2>Phonebook</h2>
-            search :<input onInput={event => setSearchText(event.target.value)} autoComplete='off' />
+            <Input text="Search:" onInput={event => setSearchText(event.target.value)} autoComplete='off' />
             <h2>Add new contact</h2>
-            <form>
-                <div>
-                    name: <input onInput={event => setNewName(event.target.value)} autoComplete="off" />
-                </div>
-                <div>
-                    number: <input onInput={event => setNewNumber(event.target.value)} autoComplete="off" />
-                </div>
-                <div>
-                    <button onClick={addPerson} type="submit">add</button>
-                </div>
-            </form>
+            <PeopleForm onNameInput={nameInput} onNumberInput={numberInput} onSubmit={addPerson} />
             <h2>Numbers</h2>
-            <div>
-                {
-                    persons.map(item => {
-                        if (item.name.toLowerCase().includes(searchText.toLowerCase()))
-                            return <p key={item.id}>{item.name} {item.number}</p>
-                    })
-                }
-            </div>
+            <People persons={persons} searchText={searchText} />
         </div>
     )
 }
