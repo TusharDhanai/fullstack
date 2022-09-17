@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
+import axios from 'axios'
 
 const Person = ({name,number}) => <p>{name} {number}</p>
 
@@ -28,20 +29,15 @@ const Button = ({onClick,type,text}) => <button onClick={onClick} type={type}>{t
 const PeopleForm = ({onNameInput,onNumberInput,onSubmit}) => {
     return (
         <form>
-            <Input text="name:" onInput={onNameInput} autoComplete="off" />
-            <Input text="number:" onInput={onNumberInput} autoComplete="off" />
+            <Input text="name" onInput={onNameInput} autoComplete="off" />
+            <Input text="number" onInput={onNumberInput} autoComplete="off" />
             <Button onClick={onSubmit} type="submit" text="add" />
         </form>
     )
 }
 
 const App = () => {
-    const [persons, setPersons] = useState([
-        { name: 'Arto Hellas', number: '040-123456', id: 1 },
-        { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-        { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-        { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
-    ])
+    const [persons, setPersons] = useState([])
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [searchText, setSearchText] = useState('')
@@ -62,10 +58,18 @@ const App = () => {
         setPersons(persons.concat({name: newName,number: newNumber,id: persons.length + 1}))
     }
 
+    useEffect(()=>{
+        axios
+        .get('http://localhost:2000/persons')
+        .then(response => {
+            setPersons(response.data)
+        })
+    },[])
+
     return (
         <div>
             <h2>Phonebook</h2>
-            <Input text="Search:" onInput={event => setSearchText(event.target.value)} autoComplete='off' />
+            <Input text="Search" onInput={event => setSearchText(event.target.value)} autoComplete='off' />
             <h2>Add new contact</h2>
             <PeopleForm onNameInput={nameInput} onNumberInput={numberInput} onSubmit={addPerson} />
             <h2>Numbers</h2>
