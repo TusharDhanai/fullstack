@@ -20,6 +20,25 @@ function App() {
             notInitialRender.current = true
     },[input]);
 
+    const showInfo = item => {
+        return (
+            <div key={item.ccn3}>
+                <h2>{item.name.common}</h2>
+                <p><b>Capital: </b>{item.capital[0]}</p>
+                <p><b>Area: </b>{item.area}</p>
+                <h3>Languages:</h3>
+                <ul>
+                    {
+                        Object.keys(item.languages).map(languageItem => {
+                            return <li key={languageItem}>{item.languages[languageItem]}</li>
+                        })
+                    }
+                </ul>
+                <img src={item.flags.svg} height="300" width="300" alt={`Flag of ${item.name.common}`} />
+            </div>
+        )
+    }
+
     const search = name => {
         if (name === '')        // exiting in case the query is empty
             return;
@@ -30,31 +49,18 @@ function App() {
             if (Response.data.length > 10) 
                 setCountryInfo(<p>Too many matches, specify another filter.</p>)
             else if (Response.data.length === 1) {
-                setCountryInfo(() => {
-                    return (
-                        Response.data.map(item => {
-                            return (
-                                <div key={item.ccn3}>
-                                    <h2>{item.name.common}</h2>
-                                    <p><b>Capital: </b>{item.capital[0]}</p>
-                                    <p><b>Area: </b>{item.area}</p>
-                                    <h3>Languages:</h3>
-                                    <ul>
-                                        {
-                                            Object.keys(item.languages).map(languageItem => {
-                                                return <li key={languageItem}>{item.languages[languageItem]}</li>
-                                            })
-                                        }
-                                    </ul>
-                                    <img src={item.flags.svg} height="300" width="300" alt={`Flag of ${item.name.common}`} />
-                                </div>
-                            )
-                        })
-                    )
-                })
+                setCountryInfo(showInfo(Response.data[0]))
             }
             else if (Response.data.length < 10 ) 
-                setCountryInfo(() => Response.data.map(item => <p key={item.ccn3}>{item.name.common}</p>))
+                setCountryInfo(() => Response.data.map(item => {
+                    return (
+                        <div key={item.ccn3}>
+                            <span>{item.name.common}</span>
+                            &nbsp;
+                            <button onClick={() => setCountryInfo(showInfo(item))}>Show</button>
+                        </div>
+                    )
+                }))
         })
     }
 
