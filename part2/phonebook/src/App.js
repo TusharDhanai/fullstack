@@ -60,16 +60,21 @@ const App = () => {
 
     const addPerson = (event) => {
         event.preventDefault();
-        const duplicate = persons.some(item => item.name === newName);
-
-        if (duplicate) {
-            alert(`${newName} is already added to the phonebook.`)
-            return;
-        }
+        const duplicate = persons.filter(item => item.name === newName);
 
         const contactData = {
             name: newName,
             number: newNumber
+        }
+
+        if (duplicate) {
+            let shouldUpdateContact = window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)
+            if (shouldUpdateContact) {
+                personsService
+                .update(duplicate[0].id,contactData)
+                .then(data => setPersons(data))
+            }
+            return;
         }
 
         personsService.create(contactData).then(data => setPersons(persons.concat(data)))
