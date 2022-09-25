@@ -90,6 +90,12 @@ const App = () => {
                     setNotifClass('updated')
                     setNotif('Updated Contact successfully.')
                     setTimeout(() => setNotif(null),5*1000)
+                }).catch(error => {
+                    if (error.request.status === 404) {
+                        setNotifClass('deleted')
+                        setNotif('Information does not exist on the server.')
+                        setTimeout(() => setNotif(null),5*1000)
+                    }
                 })
             }
             return;
