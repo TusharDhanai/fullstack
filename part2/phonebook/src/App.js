@@ -55,12 +55,21 @@ const App = () => {
             return;
         }
 
-        setPersons(persons.concat({name: newName,number: newNumber,id: persons.length + 1}))
+        const contactData = {
+            name: newName,
+            number: newNumber
+        }
+
+        axios
+            .post('http://localhost:3001/persons',contactData)
+            .then(response => {
+                setPersons(persons.concat(response.data))
+            })
     }
 
     useEffect(()=>{
         axios
-        .get('http://localhost:2000/persons')
+        .get('http://localhost:3001/persons')
         .then(response => {
             setPersons(response.data)
         })
