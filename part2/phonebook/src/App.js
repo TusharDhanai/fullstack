@@ -48,11 +48,24 @@ const PeopleForm = ({onNameInput,onNumberInput,onSubmit}) => {
     )
 }
 
+const Notification = ({className,text}) => {
+    if (text === null)
+        return
+    
+    return (
+        <div className={className}>
+            {text}
+        </div>
+    )
+}
+
 const App = () => {
     const [persons, setPersons] = useState([])
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [searchText, setSearchText] = useState('')
+    const [notif, setNotif] = useState('')
+    const [notifClass, setNotifClass] = useState('')
 
     const nameInput = event => setNewName(event.target.value)
 
@@ -60,7 +73,7 @@ const App = () => {
 
     const addPerson = (event) => {
         event.preventDefault();
-        const duplicate = persons.filter(item => item.name === newName);
+        const duplicate = persons.find(item => item.name === newName);
 
         const contactData = {
             name: newName,
@@ -71,20 +84,44 @@ const App = () => {
             let shouldUpdateContact = window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)
             if (shouldUpdateContact) {
                 personsService
-                .update(duplicate[0].id,contactData)
+                .update(duplicate.id,contactData)
                 .then(data => setPersons(data))
+                .then(() => {
+                    setNotifClass('updated')
+                    setNotif('Updated Contact successfully.')
+                    setTimeout(() => setNotif(null),5*1000)
+                })
             }
             return;
         }
 
-        personsService.create(contactData).then(data => setPersons(persons.concat(data)))
+        personsService.create(contactData)
+        .then(data => setPersons(persons.concat(data)))
+        .then(() => {
+            setNotifClass('created')
+            setNotif('Added contact successfully.')
+            setTimeout(() => setNotif(null), 5*1000);
+        })
     }
 
     const deletePerson = (event) => {
         const person = persons.find(item => event.target.id == item.id)
+
+        if (person === undefined) {
+            setNotifClass('deleted')
+            setNotif('No such person with this name')
+            setTimeout(() => setNotif(null),5*1000)
+            return
+        }
+
         if (window.confirm(`Are you sure you want to delete ${person.name}?`)){
             personsService.delContact(event.target.id)
-            setPersons(persons.filter(item => item.id !== person.id))
+            .then(() => setPersons(persons.filter(item => item.id !== person.id)))
+            .then(() => {
+                setNotifClass('deleted')
+                setNotif('Deleted contact successfully.')
+                setTimeout(() => setNotif(null),5*1000)
+            })
         }
     }
 
@@ -96,6 +133,7 @@ const App = () => {
         <div>
             <h2>Phonebook</h2>
             <Input text="Search" onInput={event => setSearchText(event.target.value)} autoComplete='off' />
+            <Notification className={notifClass} text={notif} />
             <h2>Add new contact</h2>
             <PeopleForm onNameInput={nameInput} onNumberInput={numberInput} onSubmit={addPerson} />
             <h2>Numbers</h2>

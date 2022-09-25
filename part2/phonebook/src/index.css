@@ -1,0 +1,23 @@
+.created {
+    margin-top: 10px;
+    border: 2px solid green;
+    padding: 5px;
+    color: green;
+    font: italic;
+}
+
+.updated {
+    margin-top: 10px;
+    border: 2px solid orange;
+    padding: 5px;
+    color: orange;
+    font: italic;
+}
+
+.deleted {
+    margin-top: 10px;
+    border: 2px solid red;
+    padding: 5px;
+    color: red;
+    font: italic;
+}
